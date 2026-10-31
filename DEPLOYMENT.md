@@ -1,135 +1,92 @@
-# 🚀 Deployment Guide — Agentic Data Analyst
+# 🚀 Deployment Guide — Streamlit Community Cloud
 
-This document provides step-by-step instructions to deploy the **Agentic Data Analyst** application to free cloud platforms, Docker containers, or local networks with **zero cost** and **100% reliability**.
-
----
-
-## 📑 Table of Contents
-1. [Pre-Deployment Readiness Checklist](#1-pre-deployment-readiness-checklist)
-2. [Option A: Streamlit Community Cloud (Recommended & Free)](#2-option-a-streamlit-community-cloud-recommended--free)
-3. [Option B: Hugging Face Spaces (Free)](#3-option-b-hugging-face-spaces-free)
-4. [Option C: Docker Containerization](#4-option-c-docker-containerization)
-5. [Option D: Render / Railway Deployment](#5-option-d-render--railway-deployment)
-6. [Cloud LLM & Offline Autonomous Mode](#6-cloud-llm--offline-autonomous-mode)
-7. [Troubleshooting & Verification](#7-troubleshooting--verification)
+This guide walks you through deploying the **Agentic Data Analyst** application to **Streamlit Community Cloud** with **zero cost** and a public URL for your project viva and portfolio.
 
 ---
 
-## 1. Pre-Deployment Readiness Checklist
+## 📋 Deployed Repository Contents
 
-Before pushing to any cloud platform, ensure your project includes:
-- [x] **Root Entrypoint Proxy:** [`app.py`](file:///app.py) points directly to `src/app.py`.
-- [x] **Pinned Dependencies:** [`requirements.txt`](file:///requirements.txt) includes `pysqlite3-binary` for Linux ChromaDB compatibility.
-- [x] **Streamlit Server Config:** [`.streamlit/config.toml`](file:///.streamlit/config.toml) with headless mode, CORS settings, and 50MB upload limits.
-- [x] **Container Definition:** [`Dockerfile`](file:///Dockerfile) and [`.dockerignore`](file:///.dockerignore) ready for container builds.
-- [x] **Sample Dataset:** [`data/samples/sales_data.csv`](file:///data/samples/sales_data.csv) pre-packaged for instant demonstration.
-- [x] **Dual Execution Support:** Autonomous deterministic rule-based engine active when Ollama is offline, with optional Gemini API cloud fallback.
+The repository has been pruned so that **only files required for running the application in production** are tracked in Git:
+
+```
+.
+├── .gitignore                  # Ignores development, test, and temporary files
+├── .streamlit/
+│   └── config.toml             # Streamlit cloud server & theme configuration
+├── DEPLOYMENT.md               # Streamlit Cloud deployment steps
+├── README.md                   # Project documentation & architecture
+├── app.py                      # Root entrypoint proxy
+├── config.py                   # Pydantic central application settings
+├── requirements.txt            # Production dependencies (with Linux ChromaDB support)
+├── data/
+│   ├── samples/
+│   │   ├── .gitkeep
+│   │   └── sales_data.csv      # Benchmark dataset for instant demonstration
+│   ├── uploads/
+│   │   └── .gitkeep
+│   └── vector_store/
+│       └── .gitkeep
+└── src/                        # Core application modules
+    ├── __init__.py
+    ├── app.py                  # Primary Streamlit interactive dashboard
+    ├── agents/                 # LangGraph multi-agent orchestration
+    ├── llm/                    # Local Ollama & Cloud Gemini LLM integration
+    ├── memory/                 # SQLite audit memory & ChromaDB RAG store
+    ├── profiler/               # CSV/Excel ingestion & schema profiler
+    ├── sql_engine/             # DuckDB in-memory analytical query engine
+    ├── utils/                  # Structured logging utility
+    └── visualizer/             # Plotly interactive chart builder
+```
 
 ---
 
-## 2. Option A: Streamlit Community Cloud (Recommended & Free)
+## 🛠️ Step-by-Step Deployment Instructions
 
-Streamlit Community Cloud is the fastest, free method to host your application with a public URL (e.g., `https://agentic-data-analyst.streamlit.app`).
+### Step 1: Push to GitHub
 
-### Step 1: Initialize Git and Push to GitHub
+If you have created an empty repository on GitHub (e.g. `Agentic-Data-Analyst`):
+
 ```powershell
-# In the project root directory:
-git init
-git add .
-git commit -m "Initial commit: Agentic Data Analyst ready for deployment"
-
-# Link to your GitHub repository:
-git branch -M main
+# In your project folder:
 git remote add origin https://github.com/<your-username>/Agentic-Data-Analyst.git
 git push -u origin main
 ```
 
-### Step 2: Deploy on Streamlit Cloud
-1. Go to [share.streamlit.io](https://share.streamlit.io/) and sign in with GitHub.
-2. Click **"New app"**.
-3. Select your repository: `<your-username>/Agentic-Data-Analyst`.
-4. Branch: `main`.
-5. Main file path: `app.py` (or `src/app.py`).
-6. Click **"Deploy!"**.
-
-### Step 3 (Optional): Configure Secrets for Live Cloud LLM
-If you wish to enable live generative AI responses in the cloud without local Ollama:
-1. In your Streamlit Cloud App settings, go to **Secrets**.
-2. Add your free Google Gemini API key:
-```toml
-GEMINI_API_KEY = "your_gemini_api_key_here"
-```
-*(If no API key is set, the application automatically runs in Autonomous Mode, generating DuckDB queries and Plotly charts deterministically).*
+*(If you already have a remote attached, simply run `git push origin main`)*.
 
 ---
 
-## 3. Option B: Hugging Face Spaces (Free)
+### Step 2: Deploy on Streamlit Community Cloud
 
-Hugging Face Spaces offers free 2 CPU, 16 GB RAM instances.
-
-1. Go to [huggingface.co/spaces](https://huggingface.co/spaces) and click **"Create new Space"**.
-2. Name your space (e.g., `agentic-data-analyst`).
-3. Select **Space SDK**: **Streamlit** (or **Docker**).
-4. Clone the space repository locally or push your files:
-```bash
-git remote add space https://huggingface.co/spaces/<your-username>/agentic-data-analyst
-git push space main
-```
-5. The Space will build and provide a public HTTPS URL with live interactive charts and RAG capabilities.
+1. Navigate to **[share.streamlit.io](https://share.streamlit.io/)** and sign in using your GitHub account.
+2. Click the **"New app"** button.
+3. Configure the deployment settings:
+   * **Repository:** `<your-username>/Agentic-Data-Analyst`
+   * **Branch:** `main`
+   * **Main file path:** `app.py`
+4. Click **"Deploy!"**.
+5. Streamlit Community Cloud will automatically install dependencies from `requirements.txt` and launch your live application with a public HTTPS link (e.g., `https://<your-app-name>.streamlit.app`).
 
 ---
 
-## 4. Option C: Docker Containerization
+### Step 3 (Optional): Enable Live Gemini Cloud AI
 
-Run the application anywhere Docker is supported (Windows, macOS, Linux, or Cloud VPS):
+When deployed on Streamlit Cloud, local Ollama is not present. The system automatically runs in **Autonomous Mode** using its deterministic DuckDB query generator.
 
-### Build Docker Image
-```bash
-docker build -t agentic-data-analyst .
-```
-
-### Run Container
-```bash
-docker run -d -p 8501:8501 --name agentic_analyst agentic-data-analyst
-```
-Open **`http://localhost:8501`** in your browser.
-
-### Inspect Container Health
-```bash
-docker ps
-docker logs -f agentic_analyst
-```
+If you also want live generative AI answers in the cloud for free:
+1. Obtain a free Gemini API key from [Google AI Studio](https://aistudio.google.com/).
+2. On your deployed Streamlit Cloud dashboard, click **Settings** (⚙️) ➔ **Secrets**.
+3. Add:
+   ```toml
+   GEMINI_API_KEY = "your_actual_gemini_api_key_here"
+   ```
+4. Click **Save**. Streamlit will automatically restart with live Gemini Cloud AI enabled!
 
 ---
 
-## 5. Option D: Render / Railway Deployment
+## 🔍 Verification on Streamlit Cloud
 
-To deploy on Render:
-1. Create a **New Web Service** from your GitHub repo.
-2. Environment: **Python** (or **Docker**).
-3. Build Command: `pip install -r requirements.txt`
-4. Start Command: `streamlit run app.py --server.port=$PORT --server.address=0.0.0.0`
-5. Click **Deploy**.
-
----
-
-## 6. Cloud LLM & Offline Autonomous Mode
-
-| Environment | Primary LLM Provider | Fallback Engine | Cost |
-|---|---|---|---|
-| **Local Machine** | Ollama (`qwen2.5:3b` / `llama3.2:3b`) | Deterministic Rule-Based Engine | **$0.00** |
-| **Streamlit Cloud** | Google Gemini API (optional key) | Deterministic Rule-Based Engine | **$0.00** |
-| **Docker / VPS** | Local Ollama container or Gemini API | Deterministic Rule-Based Engine | **$0.00** |
-
-> **Guarantee:** The application **never crashes** if an LLM is offline or unconfigured. The multi-agent workflow deterministically routes tasks through DuckDB and Plotly.
-
----
-
-## 7. Troubleshooting & Verification
-
-* **Issue: "Chroma requires sqlite3 >= 3.35.0" on Linux**
-  * *Resolution:* Handled automatically via `pysqlite3-binary` in `requirements.txt` and the module patch in `src/memory/rag_store.py`.
-* **Issue: Missing File Permissions on Read-Only Hosts**
-  * *Resolution:* Handled automatically. The logger falls back to standard console output if file writes are restricted.
-* **Issue: Port Binding in Cloud**
-  * *Resolution:* Handled in `.streamlit/config.toml` and `Dockerfile` via `--server.address=0.0.0.0`.
+When your app launches:
+1. In the sidebar, click **"📊 Load Benchmark Dataset (Sales)"**.
+2. Select any quick analytical suggestion or type a question (e.g., *"What is the total revenue by category?"*).
+3. Confirm that the multi-agent trace, DuckDB SQL, Plotly charts, and ChromaDB glossary cards appear instantly.
