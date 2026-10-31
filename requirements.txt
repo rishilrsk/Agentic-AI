@@ -1,0 +1,26 @@
+# Core Web & UI
+streamlit>=1.38.0
+plotly>=5.24.0
+
+# Data Processing & Storage
+pandas>=2.2.0
+openpyxl>=3.1.5
+duckdb>=1.1.0
+sqlparse>=0.5.1
+
+# Agentic AI & Orchestration
+langgraph>=0.2.20
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-community>=0.3.0
+langchain-ollama>=0.2.0
+
+# Vector Database for RAG
+chromadb>=0.5.5
+pysqlite3-binary>=0.5.6; sys_platform == 'linux'
+
+# Configuration & Utilities
+pydantic>=2.8.0
+pydantic-settings>=2.4.0
+python-dotenv>=1.0.1
+pytest>=8.3.0

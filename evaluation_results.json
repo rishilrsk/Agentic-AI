@@ -1,0 +1,8 @@
+{
+  "tasks_evaluated": 5,
+  "task_success_rate_pct": 100.0,
+  "sql_execution_success_rate_pct": 100.0,
+  "security_rejection_rate_pct": 100.0,
+  "rag_retrieval_quality_pct": 100.0,
+  "average_pipeline_latency_ms": 354.0
+}
