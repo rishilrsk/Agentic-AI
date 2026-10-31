@@ -1,157 +1,153 @@
-# 📊 Agentic Data Analyst
+# Agentic Data Analyst
 
-> An Intelligent Multi-Step Data Analysis and Insight Generation System powered by LangGraph, DuckDB, Local LLMs (Ollama), and Plotly.
-
----
-
-## 🎯 Overview
-
-The **Agentic Data Analyst** enables users to upload CSV or Excel datasets and ask complex analytical questions in natural language. Instead of acting as a naive text-to-SQL chatbot, the system executes an autonomous multi-agent workflow:
-
-$$\text{User Goal} \longrightarrow \text{Planning \& Decomposition} \longrightarrow \text{Dataset Profiling} \longrightarrow \text{RAG Glossary Retrieval} \longrightarrow \text{Safe SQL Execution} \longrightarrow \text{Self-Correction \& Validation} \longrightarrow \text{Plotly Insights}$$
+A multi-agent data analysis platform built with LangGraph, DuckDB, ChromaDB, and Streamlit. The application allows users to upload structured datasets (CSV/Excel) and query them using natural language. Instead of prompting an LLM to guess numerical answers, the system plans analytical tasks, retrieves domain definitions, generates read-only DuckDB SQL, validates queries for safety, and renders interactive Plotly visualizations.
 
 ---
 
-## 🚀 Key Features
+## Overview
 
-* **Multi-Agent Orchestration:** Structured supervisor architecture implemented in **LangGraph**.
-* **Zero Numerical Hallucination:** Computations are deterministically executed by **DuckDB** in-memory columnar engine.
-* **Self-Healing SQL:** Automatic syntax validation, AST inspection, column existence checks, and bounded retry loops.
-* **Security Hardening:** Strictly enforces single read-only `SELECT` statements; blocks `DROP`, `DELETE`, `UPDATE`, `INSERT`, `ALTER`, and system procedures.
-* **Semantic RAG:** Uses **ChromaDB** to index dataset dictionaries and business definitions for accurate context retrieval.
-* **Persistent History:** SQLite-backed audit log tracking user questions, generated SQL, execution metrics, and insights.
-* **Interactive UI:** Dynamic dashboard with live execution status, SQL inspection, and **Plotly** visual analytics built with **Streamlit**.
-* **Local-First & Zero-Cost:** Designed to run entirely offline with **Ollama** (`qwen2.5:3b` or `llama3.2:3b`), with seamless deterministic fallback when offline.
+Traditional text-to-SQL or conversational AI tools often suffer from mathematical hallucinations when calculating sums, averages, and group metrics directly. Agentic Data Analyst addresses this by separating reasoning from computation:
+
+1. **Supervisor Planner:** Decomposes the user's analytical query into structured sub-tasks.
+2. **Semantic Knowledge Retrieval (RAG):** Uses ChromaDB to look up column descriptions, calculation formulas, and business definitions to ground the query.
+3. **Deterministic SQL Analyst:** Generates standard SQL executed directly against DuckDB's in-memory columnar engine.
+4. **AST Safety & Validation:** Inspects queries before execution, strictly enforcing single read-only `SELECT` statements and blocking any data modification or system commands.
+5. **Insights & Visuals:** Translates query outputs into evidence-based summaries and interactive Plotly charts.
+6. **Audit Memory:** Records query history and execution metrics into a persistent SQLite database.
 
 ---
 
-## 🏗️ Project Architecture
+## System Architecture
 
 ```
-User Input
+User Query
     │
     ▼
-Streamlit Frontend ───► LangGraph Orchestrator
+Streamlit Interface ───► LangGraph Orchestrator
                              │
             ┌────────────────┴────────────────┐
             ▼                                 ▼
-   Supervisor / Planner Agent         Dataset Profiler
+   Supervisor Planner Agent            Dataset Profiler
             │                                 │
             ▼                                 ▼
-   RAG Knowledge Base (ChromaDB)      SQL Analyst (DuckDB)
+   ChromaDB Knowledge Store            DuckDB SQL Analyst
             │                                 │
             └────────────────┬────────────────┘
                              ▼
-                Validation & Recovery Agent
+                 AST Validation & Guard
                              │
                              ▼
-                Insight & Visualization (Plotly)
+                Plotly Visuals & Insights
+                             │
+                             ▼
+                   SQLite Audit History
 ```
 
 ---
 
-## 📁 Repository Structure
+## Tech Stack
+
+| Component | Technology | Role |
+|---|---|---|
+| **Frontend** | Streamlit | Web dashboard, dataset upload, and interactive UI |
+| **Agent Workflow** | LangGraph | State management and multi-agent coordination |
+| **SQL Engine** | DuckDB | In-memory columnar analytical query execution |
+| **Knowledge Store** | ChromaDB | Vector database for data dictionary and glossary RAG |
+| **Visualizations** | Plotly | Dynamic bar, line, pie, and scatter charts |
+| **Persistence** | SQLite | Query history, performance metrics, and audit log |
+| **LLM Support** | Ollama / Gemini API | Local-first model execution with cloud fallback |
+
+---
+
+## Project Structure
 
 ```
 .
-├── .env.example               # Configuration template
-├── config.py                  # Pydantic central settings
-├── requirements.txt           # Pinned production dependencies
-├── README.md                  # Project documentation
-├── evaluate.py                # Automated benchmark evaluation suite
-├── evaluation_results.json    # Real-world benchmark evaluation results
-├── src/
-│   ├── app.py                 # Streamlit web interface entrypoint
-│   ├── profiler/              # Phase 3: Dataset Ingestion & Profiling
-│   │   ├── __init__.py
-│   │   ├── dataset_profiler.py # Schema inspection, statistics & LLM prompt formatter
-│   │   ├── ingestion.py       # File validation, CSV/Excel parser & sanitization
-│   │   └── models.py          # ColumnProfile & DatasetProfile Pydantic models
-│   ├── sql_engine/            # Phase 4: DuckDB Analytical Engine & Security
-│   │   ├── __init__.py
-│   │   ├── executor.py        # In-memory DuckDB query runner with timing
-│   │   └── validator.py       # AST validation, read-only enforcement & limits
-│   ├── llm/                   # Phase 5: LLM Client & Prompt Engineering
-│   │   ├── __init__.py
-│   │   ├── client.py          # Ollama integration with offline fallback
-│   │   └── prompts.py         # System prompts for Planner, SQL, Fixer, Insight
-│   ├── agents/                # Phase 6: LangGraph Multi-Agent Orchestration
-│   │   ├── __init__.py
-│   │   ├── state.py           # Strongly-typed AgentState dictionary
-│   │   ├── nodes.py           # Supervisor, SQL Analyst, Fixer, Insight nodes
-│   │   └── graph.py           # Compiled state graph & routing logic
-│   ├── visualizer/            # Phase 7: Plotly Visualization Engine
-│   │   ├── __init__.py
-│   │   └── chart_builder.py   # Bar, Line, Scatter, Pie chart generators
-│   ├── memory/                # Phase 8: Persistence & RAG
-│   │   ├── __init__.py
-│   │   ├── sqlite_memory.py   # SQLite persistent query history
-│   │   └── rag_store.py       # ChromaDB semantic data dictionary store
-│   └── utils/
-│       ├── __init__.py
-│       └── logger.py          # Structured logging utility
+├── .streamlit/
+│   └── config.toml             # Streamlit server and theme configuration
+├── app.py                      # Root entrypoint proxy
+├── config.py                   # Central settings and environment config
+├── requirements.txt            # Python dependencies
+├── README.md                   # Project documentation
 ├── data/
-│   ├── uploads/               # Uploaded user datasets
-│   ├── samples/               # Benchmark test datasets (sales_data.csv)
-│   ├── vector_store/          # ChromaDB persistence directory
-│   └── analysis_history.db    # SQLite query history database
-└── tests/
-    ├── __init__.py
-    ├── test_scaffold.py       # Configuration and setup test suite
-    ├── test_profiler.py       # Ingestion and Profiler test suite
-    ├── test_sql_engine.py     # SQL safety, limits & DuckDB test suite
-    ├── test_llm.py            # LLM client & prompt test suite
-    ├── test_graph.py          # LangGraph multi-agent integration test
-    ├── test_visualizer.py     # Plotly visualization engine test suite
-    └── test_memory_rag.py     # SQLite history & ChromaDB RAG test suite
+│   ├── samples/
+│   │   └── sales_data.csv      # Sample sales dataset for immediate testing
+│   ├── uploads/                # Directory for user-uploaded datasets
+│   └── vector_store/           # ChromaDB persistent storage directory
+└── src/
+    ├── app.py                  # Streamlit application layout and components
+    ├── agents/                 # LangGraph state definition, nodes, and graph
+    ├── llm/                    # Ollama client and prompt templates
+    ├── memory/                 # SQLite audit logger and ChromaDB RAG store
+    ├── profiler/               # Ingestion, file validation, and schema profiling
+    ├── sql_engine/             # DuckDB executor and AST query safety validator
+    ├── utils/                  # Structured logging utility
+    └── visualizer/             # Plotly chart generation logic
 ```
 
 ---
 
-## 🛠️ Quickstart
+## Getting Started
 
-### 1. Prerequisites
-* Python 3.12 (64-bit)
-* Ollama installed (optional, autonomous fallback is active when Ollama is offline)
+### Prerequisites
+* Python 3.12 (64-bit recommended)
+* (Optional) [Ollama](https://ollama.com/) running locally with `qwen2.5:3b` or `llama3.2:3b`. If Ollama is not installed or offline, the system operates in autonomous mode using its deterministic query engine.
 
-### 2. Virtual Environment Setup
-```powershell
-# Using uv (recommended)
-uv venv --python 3.12 .venv
-.\.venv\Scripts\activate
+### Installation
 
-# Install dependencies
-uv pip install -r requirements.txt
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/rishilrsk/Agentic-AI.git
+   cd Agentic-AI
+   ```
 
-### 3. Running the Application
-```powershell
-streamlit run src/app.py
-```
-Open **[http://localhost:8501](http://localhost:8501)** in your browser.
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv .venv
+   # Windows:
+   .\.venv\Scripts\activate
+   # macOS/Linux:
+   source .venv/bin/activate
+   ```
 
-### 4. Running Verification Tests
-Execute the full test battery:
-```powershell
-.venv\Scripts\python.exe -m pytest tests/
-```
-*(All 33 unit and integration tests pass)*
+3. Install required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 5. Running Benchmark Evaluation
-Generate real performance metrics:
-```powershell
-.venv\Scripts\python.exe evaluate.py
+4. Start the application:
+   ```bash
+   streamlit run app.py
+   ```
+   Open `http://localhost:8501` in your browser.
+
+---
+
+## Configuration
+
+Settings can be customized via environment variables or a `.env` file:
+
+```ini
+# Ollama Configuration
+OLLAMA_BASE_URL="http://localhost:11434"
+OLLAMA_MODEL="qwen2.5:3b"
+
+# Optional Cloud LLM (for Streamlit Cloud or environments without local Ollama)
+GEMINI_API_KEY=""
+
+# Limits
+MAX_FILE_SIZE_MB=50
+MAX_QUERY_EXEC_SECONDS=10
+MAX_RESULT_ROWS=500
 ```
 
 ---
 
-## 📊 Measured Benchmark Results
+## Security & Query Safety
 
-| Metric | Result | Evaluation Method |
-|---|---|---|
-| **Analytical Tasks Evaluated** | 5 / 5 | Full multi-agent execution battery |
-| **Task Success Rate** | **100.0%** | End-to-end question to insight |
-| **SQL Execution Success Rate** | **100.0%** | Zero syntax or catalog failures |
-| **Security Rejection Rate** | **100.0% (5/5)** | AST validation blocks DDL/DML/PRAGMA |
-| **RAG Retrieval Quality** | **100.0%** | ChromaDB semantic term match |
-| **Average Pipeline Latency** | **1,899 ms** | Sub-2-second end-to-end response |
+Because the application converts natural language into executable database queries, it enforces strict security boundaries:
+
+* **Read-Only Enforcement:** Queries must parse strictly as a single `SELECT` statement.
+* **Prohibited Keywords:** Any presence of `DROP`, `DELETE`, `UPDATE`, `INSERT`, `ALTER`, `ATTACH`, `COPY`, `PRAGMA`, or administrative commands triggers immediate rejection.
+* **Multi-Statement Blocking:** Semicolon-separated injection payloads are blocked at the AST parser level.
+* **Timeout and Row Limits:** All DuckDB executions enforce strict execution timeouts and row count limits.
