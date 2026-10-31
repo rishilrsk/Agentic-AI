@@ -66,6 +66,35 @@ def inject_custom_css():
             background-color: #F8FAFC;
         }
 
+        /* Left Sidebar Panel - Soft Grey with Visual Distinction & Collapsible Cue */
+        section[data-testid="stSidebar"],
+        section[data-testid="stSidebar"] > div:first-child {
+            background-color: #F1F5F9 !important;
+            border-right: 1px solid #CBD5E1 !important;
+        }
+
+        /* Left Sidebar File Uploader Box */
+        section[data-testid="stSidebar"] [data-testid="stFileUploader"] {
+            background-color: #FFFFFF !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+        }
+
+        /* Collapse / Expand Arrow Button - Clean Visual Cue */
+        [data-testid="stSidebarCollapseButton"] button,
+        [data-testid="collapsedControl"] button {
+            background-color: #E2E8F0 !important;
+            border: 1px solid #CBD5E1 !important;
+            border-radius: 6px !important;
+            color: #334155 !important;
+        }
+        [data-testid="stSidebarCollapseButton"] button:hover,
+        [data-testid="collapsedControl"] button:hover {
+            background-color: #CBD5E1 !important;
+            color: #0F172A !important;
+        }
+
         /* Top Navigation Bar */
         .app-navbar {
             background: #FFFFFF;
