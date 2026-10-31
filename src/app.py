@@ -43,7 +43,7 @@ def get_shared_resources():
 def init_page():
     st.set_page_config(
         page_title="Agentic Data Analyst | Autonomous AI Platform",
-        page_icon="📊",
+        page_icon="⚡",
         layout="wide",
         initial_sidebar_state="expanded",
     )
@@ -54,78 +54,152 @@ def inject_saas_custom_css():
     st.markdown(
         """
         <style>
-        /* Import clean inter font */
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        /* Import Inter & Plus Jakarta Sans */
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-        html, body, [class*="css"] {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        /* Global Typography */
+        html, body, [class*="css"], .stMarkdown, p, div {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
             color: #0F172A;
         }
 
-        /* App Background */
+        /* Clean Background */
         .stApp {
-            background-color: #FAFAFC;
+            background: #FAFAFC;
         }
 
         /* Top Header Styling */
-        .saas-header {
+        .header-bar {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 14px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 0 16px 0;
-            border-bottom: 1px solid #E2E8F0;
-            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
-        .saas-title {
-            font-size: 1.65rem;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            color: #0F172A;
-            margin: 0;
+        .header-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
-        .saas-tagline {
-            font-size: 0.88rem;
+        .header-icon {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+        }
+        .header-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #0F172A;
+            line-height: 1.2;
+            margin: 0;
+        }
+        .header-sub {
+            font-size: 0.82rem;
             color: #64748B;
-            margin-top: 2px;
+            font-weight: 500;
         }
 
-        /* Status Badge Pills */
-        .status-pill {
+        /* Badges */
+        .badge-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .tech-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
             font-size: 0.74rem;
             font-weight: 600;
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 9999px;
-            background: #F1F5F9;
-            color: #334155;
             border: 1px solid #E2E8F0;
+            background: #F8FAFC;
+            color: #334155;
+            transition: all 0.2s ease;
         }
-        .status-pill.online {
+        .tech-badge:hover {
+            border-color: #CBD5E1;
+            background: #F1F5F9;
+        }
+        .tech-badge.green {
             background: #ECFDF5;
             color: #065F46;
             border-color: #A7F3D0;
         }
-        .status-pill.duckdb {
-            background: #FFFBEB;
-            color: #92400E;
-            border-color: #FDE68A;
-        }
-        .status-pill.rag {
+        .tech-badge.blue {
             background: #EFF6FF;
             color: #1E40AF;
             border-color: #BFDBFE;
         }
+        .tech-badge.amber {
+            background: #FFFBEB;
+            color: #92400E;
+            border-color: #FDE68A;
+        }
 
-        /* KPI Metric Cards */
-        .kpi-container {
+        /* Hero Welcome Banner */
+        .hero-banner {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 44px 32px;
+            text-align: center;
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+            margin-bottom: 24px;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #EFF6FF;
+            color: #2563EB;
+            border: 1px solid #DBEAFE;
+            border-radius: 9999px;
+            padding: 4px 14px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 16px;
+        }
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: #0F172A;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        .hero-subtitle {
+            font-size: 1rem;
+            color: #64748B;
+            max-width: 640px;
+            margin: 0 auto 28px auto;
+            line-height: 1.6;
+        }
+
+        /* KPI Cards Grid */
+        .kpi-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 14px;
+            gap: 12px;
             margin-bottom: 22px;
         }
         .kpi-card {
@@ -133,162 +207,153 @@ def inject_saas_custom_css():
             border: 1px solid #E2E8F0;
             border-radius: 12px;
             padding: 16px 18px;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
             transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .kpi-card:hover {
             border-color: #CBD5E1;
-            box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
-            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+            transform: translateY(-2px);
         }
         .kpi-label {
-            font-size: 0.76rem;
-            font-weight: 600;
+            font-size: 0.74rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.06em;
             color: #64748B;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
-        .kpi-val {
-            font-size: 1.55rem;
-            font-weight: 700;
+        .kpi-value {
+            font-size: 1.6rem;
+            font-weight: 800;
             color: #0F172A;
-            letter-spacing: -0.02em;
+            letter-spacing: -0.03em;
         }
         .kpi-sub {
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             color: #94A3B8;
-            margin-top: 4px;
+            font-weight: 500;
+            margin-top: 2px;
         }
 
-        /* Modern SaaS Card Containers */
-        .saas-card {
+        /* Pipeline Stepper */
+        .pipeline-stepper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             border-radius: 12px;
-            padding: 22px;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+            padding: 12px 18px;
             margin-bottom: 20px;
+            overflow-x: auto;
+            gap: 8px;
         }
-        .saas-card-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #0F172A;
-            margin-bottom: 14px;
+        .step-node {
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        /* Pipeline Flow Stepper */
-        .stepper-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-            background: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: 10px;
-            padding: 10px 14px;
-            margin: 12px 0 18px 0;
             font-size: 0.8rem;
             font-weight: 600;
-            color: #475569;
+            color: #334155;
+            white-space: nowrap;
         }
-        .step-item {
-            display: inline-flex;
+        .step-num {
+            background: #EFF6FF;
+            color: #2563EB;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
-            gap: 5px;
-            padding: 4px 8px;
-            border-radius: 6px;
-            background: #FFFFFF;
-            border: 1px solid #E2E8F0;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border: 1px solid #BFDBFE;
         }
-        .step-arrow {
-            color: #94A3B8;
-            font-size: 0.85rem;
-        }
-
-        /* Grounded Insights Box */
-        .insights-card {
-            background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
-            border-left: 4px solid #2563EB;
-            border-radius: 8px;
-            padding: 18px 20px;
-            margin: 16px 0;
-            font-size: 0.94rem;
-            line-height: 1.6;
-            color: #1E293B;
+        .step-connector {
+            color: #CBD5E1;
+            font-size: 0.9rem;
         }
 
-        /* Primary Button Elevation */
-        div.stButton > button[kind="primary"],
-        div.stButton > button:first-child {
-            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
-            color: #FFFFFF !important;
-            font-weight: 600;
-            border-radius: 8px;
-            border: none;
-            padding: 0.55rem 1.25rem;
-            box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-            transition: all 0.15s ease-in-out;
+        /* Grounded Insights Banner */
+        .insights-box {
+            background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+            border: 1px solid #BFDBFE;
+            border-left: 5px solid #2563EB;
+            border-radius: 12px;
+            padding: 22px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.06);
         }
-        div.stButton > button[kind="primary"]:hover,
-        div.stButton > button:first-child:hover {
-            background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
-            box-shadow: 0 6px 14px rgba(37, 99, 235, 0.3);
-            transform: translateY(-1px);
-        }
-
-        /* Secondary/Preset Button Styling */
-        .chip-button > div > button {
-            background-color: #F8FAFC !important;
-            color: #334155 !important;
-            border: 1px solid #E2E8F0 !important;
-            border-radius: 20px !important;
-            font-size: 0.8rem !important;
-            font-weight: 500 !important;
-            padding: 4px 12px !important;
-            box-shadow: none !important;
-        }
-        .chip-button > div > button:hover {
-            background-color: #EFF6FF !important;
-            border-color: #BFDBFE !important;
-            color: #1D4ED8 !important;
-            transform: translateY(-1px);
-        }
-
-        /* Clean Sidebar styling */
-        section[data-testid="stSidebar"] {
-            background-color: #FFFFFF;
-            border-right: 1px solid #E2E8F0;
-        }
-        section[data-testid="stSidebar"] .block-container {
-            padding-top: 2rem;
-        }
-
-        /* Clean Streamlit Tabs */
-        .stTabs [data-baseweb="tab-list"] {
+        .insights-header {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #1E40AF;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
             gap: 8px;
-            border-bottom: 1px solid #E2E8F0;
+        }
+
+        /* Buttons Overrides */
+        div.stButton > button[kind="primary"],
+        div.stButton > button {
+            border-radius: 10px !important;
+            font-weight: 600 !important;
+            font-size: 0.88rem !important;
+            padding: 0.55rem 1.2rem !important;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        div.stButton > button[kind="primary"] {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+            border: none !important;
+            color: white !important;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25) !important;
+        }
+        div.stButton > button[kind="primary"]:hover {
+            background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
+            transform: translateY(-1px) !important;
+        }
+
+        /* Text Input */
+        div[data-testid="stTextInput"] input {
+            border-radius: 10px !important;
+            border: 1px solid #CBD5E1 !important;
+            padding: 12px 16px !important;
+            font-size: 0.95rem !important;
+            background: #FFFFFF !important;
+            transition: all 0.2s ease !important;
+        }
+        div[data-testid="stTextInput"] input:focus {
+            border-color: #2563EB !important;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+        }
+
+        /* Tabs */
+        .stTabs [data-baseweb="tab-list"] {
+            gap: 12px !important;
+            border-bottom: 1px solid #E2E8F0 !important;
+            padding-bottom: 4px !important;
         }
         .stTabs [data-baseweb="tab"] {
-            padding: 8px 16px;
-            border-radius: 8px 8px 0 0;
-            font-weight: 600;
-            font-size: 0.88rem;
-            color: #64748B;
+            font-weight: 600 !important;
+            font-size: 0.88rem !important;
+            padding: 8px 16px !important;
+            border-radius: 8px !important;
+            color: #64748B !important;
         }
         .stTabs [aria-selected="true"] {
             color: #2563EB !important;
-            border-bottom: 2px solid #2563EB !important;
-            background-color: transparent !important;
+            background: #EFF6FF !important;
+            border-bottom: none !important;
         }
 
-        /* Code Block Styling */
+        /* Code Blocks */
         pre, code {
-            font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
-            border-radius: 8px !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.85rem !important;
         }
         </style>
         """,
@@ -296,18 +361,53 @@ def inject_saas_custom_css():
     )
 
 
+def load_sample_dataset_action(rag: RAGKnowledgeBase):
+    """Loads sample benchmark sales dataset and populates RAG."""
+    sample_path = settings.PROJECT_ROOT / "data" / "samples" / "sales_data.csv"
+    if sample_path.exists():
+        df, mapping = load_dataset(sample_path, "sales_data.csv")
+        profiler = DatasetProfiler()
+        profile = profiler.profile_dataframe(
+            df,
+            file_name="sales_data.csv",
+            column_mapping=mapping,
+        )
+        sample_defs = [
+            {"term": "revenue", "definition": "Total sales revenue in USD (Units Sold × Unit Price - Discount)."},
+            {"term": "units_sold", "definition": "Quantity of physical merchandise units purchased in an order."},
+            {"term": "unit_price", "definition": "Standard base price per single unit in USD."},
+            {"term": "discount", "definition": "Promotional deduction rate (0.00 = 0% discount, 0.10 = 10% discount)."},
+            {"term": "category", "definition": "High-level merchandise classification (Electronics, Furniture)."},
+            {"term": "city", "definition": "Metropolitan delivery market where order was fulfilled."},
+            {"term": "customer_rating", "definition": "Customer satisfaction score recorded on a 1.0 to 5.0 scale."},
+            {"term": "product_name", "definition": "Specific commercial product SKU description."},
+            {"term": "order_date", "definition": "Calendar timestamp recording when customer placed the transaction."},
+            {"term": "order_id", "definition": "Unique transactional primary key identifier."},
+        ]
+        rag.index_definitions(sample_defs)
+        st.session_state["current_df"] = df
+        st.session_state["current_profile"] = profile
+        st.session_state["column_mapping"] = mapping
+        st.session_state["last_uploaded_name"] = "sales_data.csv"
+        st.session_state["active_query_input"] = ""
+
+
 def render_header(llm: LLMClient, rag: RAGKnowledgeBase):
     st.markdown(
         f"""
-        <div class="saas-header">
-            <div>
-                <h1 class="saas-title">📊 Agentic Data Analyst</h1>
-                <div class="saas-tagline">Autonomous Multi-Step Data Analysis, Safe SQL Generation & Grounded Insights</div>
+        <div class="header-bar">
+            <div class="header-brand">
+                <div class="header-icon">⚡</div>
+                <div>
+                    <h1 class="header-title">Agentic Data Analyst</h1>
+                    <div class="header-sub">Autonomous Multi-Agent Analytical Intelligence & Safe SQL Generation</div>
+                </div>
             </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <span class="status-pill online">⚡ {llm.get_status_label()}</span>
-                <span class="status-pill duckdb">🦆 DuckDB Columnar</span>
-                <span class="status-pill rag">📚 ChromaDB RAG ({len(rag.get_all_definitions())} Terms)</span>
+            <div class="badge-row">
+                <span class="tech-badge green">● {llm.get_status_label()}</span>
+                <span class="tech-badge amber">🦆 DuckDB Columnar</span>
+                <span class="tech-badge blue">📚 ChromaDB RAG ({len(rag.get_all_definitions())} Terms)</span>
+                <span class="tech-badge">🛡️ AST SQL Guard</span>
             </div>
         </div>
         """,
@@ -317,7 +417,7 @@ def render_header(llm: LLMClient, rag: RAGKnowledgeBase):
 
 def render_sidebar(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase):
     with st.sidebar:
-        st.markdown("### 📁 Dataset Workspace")
+        st.markdown("### 📁 Dataset Manager")
 
         uploaded_file = st.file_uploader(
             "Upload CSV or Excel dataset",
@@ -338,8 +438,6 @@ def render_sidebar(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase):
                             file_name=uploaded_file.name,
                             column_mapping=mapping,
                         )
-
-                        # Auto-enrich and index rich business definitions into RAG store
                         enriched_defs = auto_enrich_dataset_glossary(profile.columns)
                         rag.index_definitions(enriched_defs)
 
@@ -357,51 +455,26 @@ def render_sidebar(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase):
         sample_path = settings.PROJECT_ROOT / "data" / "samples" / "sales_data.csv"
         if sample_path.exists():
             st.markdown(
-                "<div style='text-align: center; color: #94A3B8; font-size: 0.8rem; margin: 8px 0;'>— OR QUICK START —</div>",
+                "<div style='text-align: center; color: #94A3B8; font-size: 0.75rem; margin: 10px 0;'>— OR QUICK LOAD —</div>",
                 unsafe_allow_html=True,
             )
             if st.button("📊 Load Benchmark Dataset (Sales)", use_container_width=True):
                 try:
                     with st.spinner("Loading benchmark sales dataset..."):
-                        df, mapping = load_dataset(sample_path, "sales_data.csv")
-                        profiler = DatasetProfiler()
-                        profile = profiler.profile_dataframe(
-                            df,
-                            file_name="sales_data.csv",
-                            column_mapping=mapping,
-                        )
-                        # Index rich domain glossary definitions
-                        sample_defs = [
-                            {"term": "revenue", "definition": "Total sales revenue in USD (Units Sold × Unit Price - Discount)."},
-                            {"term": "units_sold", "definition": "Quantity of physical merchandise units purchased in an order."},
-                            {"term": "unit_price", "definition": "Standard base price per single unit in USD."},
-                            {"term": "discount", "definition": "Promotional deduction rate (0.00 = 0% discount, 0.10 = 10% discount)."},
-                            {"term": "category", "definition": "High-level merchandise classification (Electronics, Furniture)."},
-                            {"term": "city", "definition": "Metropolitan delivery market where order was fulfilled."},
-                            {"term": "customer_rating", "definition": "Customer satisfaction score recorded on a 1.0 to 5.0 scale."},
-                            {"term": "product_name", "definition": "Specific commercial product SKU description."},
-                            {"term": "order_date", "definition": "Calendar timestamp recording when customer placed the transaction."},
-                            {"term": "order_id", "definition": "Unique transactional primary key identifier."},
-                        ]
-                        rag.index_definitions(sample_defs)
-
-                        st.session_state["current_df"] = df
-                        st.session_state["current_profile"] = profile
-                        st.session_state["column_mapping"] = mapping
-                        st.session_state["last_uploaded_name"] = "sales_data.csv"
+                        load_sample_dataset_action(rag)
                         st.success("Loaded benchmark dataset successfully!")
                         st.rerun()
                 except Exception as e:
                     st.error(f"Error loading benchmark: {str(e)}")
 
         st.markdown("---")
-        st.markdown("### ⚙️ System Specifications")
+        st.markdown("### ⚙️ System Architecture")
         st.markdown(
             f"""
-            <div style="font-size: 0.84rem; color: #475569; line-height: 1.8;">
-                <div><strong>• Orchestrator:</strong> LangGraph Multi-Agent</div>
-                <div><strong>• Analytical SQL:</strong> DuckDB In-Memory</div>
-                <div><strong>• Vector Engine:</strong> ChromaDB</div>
+            <div style="font-size: 0.82rem; color: #475569; line-height: 1.8;">
+                <div><strong>• Orchestration:</strong> LangGraph Multi-Agent</div>
+                <div><strong>• SQL Engine:</strong> DuckDB Columnar (In-Memory)</div>
+                <div><strong>• Knowledge Store:</strong> ChromaDB Semantic RAG</div>
                 <div><strong>• Memory Store:</strong> SQLite Audit Log</div>
                 <div><strong>• Visualizer:</strong> Plotly Graph Objects</div>
             </div>
@@ -524,27 +597,41 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
     df = st.session_state.get("current_df")
     profile = st.session_state.get("current_profile")
 
+    # Hero Banner when no dataset is loaded
     if df is None or profile is None:
         st.markdown(
             """
-            <div class="saas-card" style="text-align: center; padding: 48px 24px;">
-                <div style="font-size: 2.8rem; margin-bottom: 12px;">📊</div>
-                <h2 style="font-weight: 700; color: #0F172A; margin-bottom: 8px;">Welcome to Agentic Data Analyst</h2>
-                <p style="color: #64748B; max-width: 600px; margin: 0 auto 24px auto; font-size: 0.95rem;">
-                    Upload any CSV/Excel file in the sidebar, or click <strong>'Load Benchmark Dataset'</strong> 
-                    to explore autonomous multi-agent analysis, safe DuckDB SQL queries, and Plotly visual insights.
+            <div class="hero-banner">
+                <div class="hero-badge">⚡ Autonomous Agentic AI Platform</div>
+                <h2 class="hero-title">Intelligent Multi-Step Data Analysis</h2>
+                <p class="hero-subtitle">
+                    Transform raw datasets into actionable insights with autonomous LangGraph planning, 
+                    deterministic DuckDB SQL execution, and ChromaDB semantic knowledge grounding.
                 </p>
-                <div class="stepper-container" style="justify-content: center; max-width: 720px; margin: 0 auto;">
-                    <span class="step-item">🧠 Supervisor Planner</span>
-                    <span class="step-arrow">➔</span>
-                    <span class="step-item">📚 ChromaDB RAG</span>
-                    <span class="step-arrow">➔</span>
-                    <span class="step-item">🦆 DuckDB Columnar</span>
-                    <span class="step-arrow">➔</span>
-                    <span class="step-item">🛡️ Safe AST Check</span>
-                    <span class="step-arrow">➔</span>
-                    <span class="step-item">📈 Plotly Insights</span>
-                </div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        col_c1, col_c2, col_c3 = st.columns([1, 2, 1])
+        with col_c2:
+            if st.button("🚀 Load Benchmark Sales Dataset (Instant Demo)", type="primary", use_container_width=True):
+                with st.spinner("Initializing benchmark dataset and indexing RAG knowledge store..."):
+                    load_sample_dataset_action(rag)
+                    st.rerun()
+
+        st.markdown(
+            """
+            <div class="pipeline-stepper" style="max-width: 820px; margin: 32px auto 0 auto;">
+                <div class="step-node"><span class="step-num">1</span> Supervisor Planner</div>
+                <div class="step-connector">➔</div>
+                <div class="step-node"><span class="step-num">2</span> ChromaDB Glossary</div>
+                <div class="step-connector">➔</div>
+                <div class="step-node"><span class="step-num">3</span> DuckDB Columnar Engine</div>
+                <div class="step-connector">➔</div>
+                <div class="step-node"><span class="step-num">4</span> AST Safety Check</div>
+                <div class="step-connector">➔</div>
+                <div class="step-node"><span class="step-num">5</span> Plotly Visuals</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -554,31 +641,31 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
     # Top KPI Metrics Cards
     st.markdown(
         f"""
-        <div class="kpi-container">
+        <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-label">Active Dataset</div>
-                <div class="kpi-val" style="font-size: 1.15rem; word-break: break-all;">{profile.file_name}</div>
-                <div class="kpi-sub">Ready for analysis</div>
+                <div class="kpi-value" style="font-size: 1.15rem; word-break: break-all;">{profile.file_name}</div>
+                <div class="kpi-sub">Ready for query execution</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Total Records</div>
-                <div class="kpi-val">{profile.row_count:,}</div>
-                <div class="kpi-sub">Rows ingested</div>
+                <div class="kpi-value">{profile.row_count:,}</div>
+                <div class="kpi-sub">Rows in DuckDB catalog</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Total Attributes</div>
-                <div class="kpi-val">{profile.column_count}</div>
+                <div class="kpi-value">{profile.column_count}</div>
                 <div class="kpi-sub">Columns profiled</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Data Quality</div>
-                <div class="kpi-val" style="color: {'#166534' if profile.missing_cell_percentage == 0 else '#B45309'};">{100 - profile.missing_cell_percentage:.1f}%</div>
+                <div class="kpi-value" style="color: {'#166534' if profile.missing_cell_percentage == 0 else '#B45309'};">{100 - profile.missing_cell_percentage:.1f}%</div>
                 <div class="kpi-sub">{profile.total_missing_cells} missing cells</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Memory Footprint</div>
-                <div class="kpi-val">{profile.memory_usage_mb:.2f} <span style="font-size: 0.9rem; font-weight: 500;">MB</span></div>
-                <div class="kpi-sub">In-memory cache</div>
+                <div class="kpi-value">{profile.memory_usage_mb:.2f} <span style="font-size: 0.85rem; font-weight: 500;">MB</span></div>
+                <div class="kpi-sub">Zero-copy in-memory</div>
             </div>
         </div>
         """,
@@ -597,15 +684,16 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
     with tab_chat:
         st.markdown(
             """
-            <div class="stepper-container">
-                <span style="color: #64748B;">Multi-Agent Pipeline:</span>
-                <span class="step-item">1. Supervisor Planner</span>
-                <span class="step-arrow">➔</span>
-                <span class="step-item">2. Semantic RAG Grounding</span>
-                <span class="step-arrow">➔</span>
-                <span class="step-item">3. DuckDB SQL Analyst</span>
-                <span class="step-arrow">➔</span>
-                <span class="step-item">4. Plotly Insight Generation</span>
+            <div class="pipeline-stepper">
+                <div class="step-node"><span class="step-num">1</span> Supervisor Planner</div>
+                <div class="step-connector">➔</div>
+                <div class="step-node"><span class="step-num">2</span> Semantic RAG Grounding</div>
+                <div class="step-connector">➔</div>
+                <div class="step-node"><span class="step-num">3</span> DuckDB SQL Analyst</div>
+                <div class="step-connector">➔</div>
+                <div class="step-node"><span class="step-num">4</span> AST Safety & Limits</div>
+                <div class="step-connector">➔</div>
+                <div class="step-node"><span class="step-num">5</span> Plotly Insight Generation</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -613,12 +701,12 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
 
         # Dynamic Quick-Question Pill Chips
         suggestions = generate_dynamic_suggestions(profile)
-        st.markdown("<div style='font-size: 0.8rem; font-weight: 600; color: #64748B; margin-bottom: 6px;'>💡 Quick Analytical Prompts (1-Click):</div>", unsafe_allow_html=True)
-        
+        st.markdown("<div style='font-size: 0.82rem; font-weight: 700; color: #475569; margin-bottom: 8px;'>💡 Suggested Analytical Prompts (1-Click Fill):</div>", unsafe_allow_html=True)
+
         chip_cols = st.columns(len(suggestions))
         for idx, s in enumerate(suggestions):
             with chip_cols[idx]:
-                short_text = s if len(s) < 28 else s[:25] + "..."
+                short_text = s if len(s) < 30 else s[:27] + "..."
                 if st.button(f"🔍 {short_text}", key=f"chip_{idx}", use_container_width=True, help=s):
                     st.session_state["active_query_input"] = s
 
@@ -632,7 +720,7 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
         with col_btn1:
             run_clicked = st.button("🚀 Run Multi-Agent Analysis", type="primary", use_container_width=True)
         with col_btn2:
-            if st.button("🔄 Clear", use_container_width=True):
+            if st.button("🔄 Reset Query", use_container_width=True):
                 st.session_state["active_query_input"] = ""
                 st.session_state["latest_analysis"] = None
                 st.rerun()
@@ -660,17 +748,17 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
             # 1. RAG Transparent Retrieval Card
             rag_matches = latest.get("rag_matches", [])
             with st.container():
-                st.markdown("<div class='saas-card-title'>📚 Semantic RAG Knowledge Retrieved</div>", unsafe_allow_html=True)
+                st.markdown("<div style='font-size: 1.05rem; font-weight: 700; color: #0F172A; margin-bottom: 12px;'>📚 Semantic Knowledge Retrieved by ChromaDB</div>", unsafe_allow_html=True)
                 if rag_matches:
                     rag_cols = st.columns(len(rag_matches))
                     for idx, match in enumerate(rag_matches):
                         with rag_cols[idx]:
                             st.markdown(
                                 f"""
-                                <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-left: 3px solid #2563EB; padding: 12px; border-radius: 8px;">
-                                    <div style="font-weight: 600; color: #0F172A; font-size: 0.88rem;">🔍 {match['term']}</div>
-                                    <div style="font-size: 0.72rem; color: #2563EB; font-weight: 600; margin: 2px 0 6px 0;">{match['relevance']}</div>
-                                    <div style="font-size: 0.8rem; color: #475569; line-height: 1.4;">{match['definition']}</div>
+                                <div style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-left: 3px solid #2563EB; padding: 14px; border-radius: 10px; box-shadow: 0 1px 3px rgba(15,23,42,0.04);">
+                                    <div style="font-weight: 700; color: #0F172A; font-size: 0.9rem;">🔍 {match['term']}</div>
+                                    <div style="font-size: 0.74rem; color: #2563EB; font-weight: 700; margin: 2px 0 6px 0;">{match['relevance']}</div>
+                                    <div style="font-size: 0.82rem; color: #475569; line-height: 1.4;">{match['definition']}</div>
                                 </div>
                                 """,
                                 unsafe_allow_html=True,
@@ -689,11 +777,11 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
             if latest.get("insights"):
                 st.markdown(
                     f"""
-                    <div class="insights-card">
-                        <div style="font-size: 1.05rem; font-weight: 700; color: #1E3A8A; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
-                            💡 Mathematically Grounded Findings
+                    <div class="insights-box">
+                        <div class="insights-header">
+                            💡 Mathematically Grounded Findings (DuckDB Validated)
                         </div>
-                        <div>{latest['insights']}</div>
+                        <div style="font-size: 0.95rem; line-height: 1.6; color: #1E293B;">{latest['insights']}</div>
                     </div>
                     """,
                     unsafe_allow_html=True,
@@ -703,7 +791,7 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
             res_df = latest.get("query_results_df")
             chart_cfg = latest.get("chart_config")
             if res_df is not None and not res_df.empty and chart_cfg:
-                st.markdown("<div class='saas-card-title'>📈 Visual Analytics</div>", unsafe_allow_html=True)
+                st.markdown("<div style='font-size: 1.05rem; font-weight: 700; color: #0F172A; margin: 18px 0 10px 0;'>📈 Visual Analytics</div>", unsafe_allow_html=True)
                 fig = build_plotly_chart(
                     df=res_df,
                     chart_type=chart_cfg.get("chart_type", "bar"),
@@ -712,7 +800,6 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
                     title=chart_cfg.get("title", "Analysis Results"),
                 )
                 if fig:
-                    # Apply clean minimalist layout styling to plotly chart
                     fig.update_layout(
                         template="plotly_white",
                         font_family="Plus Jakarta Sans, sans-serif",
@@ -725,7 +812,7 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
 
             # 5. Query Results Table
             if res_df is not None and not res_df.empty:
-                st.markdown(f"<div class='saas-card-title'>📋 Query Results ({len(res_df)} rows)</div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='font-size: 1.05rem; font-weight: 700; color: #0F172A; margin: 18px 0 10px 0;'>📋 Query Results ({len(res_df)} rows)</div>", unsafe_allow_html=True)
                 st.dataframe(res_df, use_container_width=True)
 
             # 6. Executed Safe SQL Inspector
