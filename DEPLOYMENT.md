@@ -44,15 +44,8 @@ The repository has been pruned so that **only files required for running the app
 
 ### Step 1: Push to GitHub
 
-If you have created an empty repository on GitHub (e.g. `Agentic-Data-Analyst`):
-
-```powershell
-# In your project folder:
-git remote add origin https://github.com/<your-username>/Agentic-Data-Analyst.git
-git push -u origin main
-```
-
-*(If you already have a remote attached, simply run `git push origin main`)*.
+The repository is already pushed to GitHub:
+**`https://github.com/rishilrsk/Agentic-AI.git`** (branch: `main`)
 
 ---
 
@@ -61,11 +54,11 @@ git push -u origin main
 1. Navigate to **[share.streamlit.io](https://share.streamlit.io/)** and sign in using your GitHub account.
 2. Click the **"New app"** button.
 3. Configure the deployment settings:
-   * **Repository:** `<your-username>/Agentic-Data-Analyst`
+   * **Repository:** `rishilrsk/Agentic-AI`
    * **Branch:** `main`
    * **Main file path:** `app.py`
 4. Click **"Deploy!"**.
-5. Streamlit Community Cloud will automatically install dependencies from `requirements.txt` and launch your live application with a public HTTPS link (e.g., `https://<your-app-name>.streamlit.app`).
+5. Streamlit Community Cloud will automatically install dependencies from `requirements.txt` and launch your live application with a public HTTPS link.
 
 ---
 
