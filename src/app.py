@@ -1,7 +1,8 @@
 """
 Agentic Data Analyst — Professional Analytics Workspace
 Crafted with clean UI/UX design principles: disciplined typography,
-restrained color palette, structured dropdown query selection, and zero visual clutter.
+restrained color palette, structured 10-question dropdown, intuitive onboarding for first-time users,
+and light-blue button styling with high-contrast visible text.
 """
 
 import sys
@@ -50,11 +51,10 @@ def init_page():
 
 
 def inject_custom_css():
-    """Injects professional, modern enterprise dashboard styling (Stripe / Datadog style)."""
+    """Injects professional, modern enterprise styling with light blue buttons and clear contrast."""
     st.markdown(
         """
         <style>
-        /* Modern enterprise typography */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
         html, body, [class*="css"], .stMarkdown, p, div {
@@ -62,7 +62,6 @@ def inject_custom_css():
             color: #1E293B;
         }
 
-        /* Clean canvas */
         .stApp {
             background-color: #F8FAFC;
         }
@@ -124,6 +123,26 @@ def inject_custom_css():
             border-color: #DCFCE7;
         }
 
+        /* First Time User Helper Banner */
+        .onboarding-guide-card {
+            background: #F0F9FF;
+            border: 1px solid #BAE6FD;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+        }
+        .guide-step-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #0369A1;
+            margin-bottom: 6px;
+        }
+        .guide-step-desc {
+            font-size: 0.82rem;
+            color: #0C4A6E;
+            line-height: 1.5;
+        }
+
         /* Dataset Summary Strip */
         .dataset-strip {
             background: #FFFFFF;
@@ -160,29 +179,11 @@ def inject_custom_css():
             font-weight: 600;
         }
 
-        /* Analytical Card */
-        .analytics-card {
-            background: #FFFFFF;
-            border: 1px solid #E2E8F0;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-        }
-        .card-header-title {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #0F172A;
-            margin-bottom: 14px;
-        }
-
         /* Findings Callout */
         .findings-callout {
             background: #F8FAFC;
-            border-left: 3px solid #2563EB;
             border: 1px solid #E2E8F0;
-            border-left-width: 4px;
-            border-left-color: #2563EB;
+            border-left: 4px solid #0284C7;
             border-radius: 6px;
             padding: 16px 18px;
             margin: 16px 0;
@@ -191,24 +192,51 @@ def inject_custom_css():
             color: #334155;
         }
 
-        /* Clean Primary Button */
+        /* Light Blue Buttons with Visible High-Contrast Text */
         div.stButton > button[kind="primary"],
         div.stButton > button {
             border-radius: 6px !important;
-            font-weight: 500 !important;
-            font-size: 0.875rem !important;
-            padding: 0.5rem 1rem !important;
+            font-weight: 600 !important;
+            font-size: 0.88rem !important;
+            padding: 0.55rem 1.15rem !important;
             transition: all 0.15s ease !important;
         }
+
+        /* Primary Button: Vibrant Light Sky Blue with Dark High-Contrast Text */
         div.stButton > button[kind="primary"] {
-            background: #2563EB !important;
-            border: 1px solid #1D4ED8 !important;
-            color: #FFFFFF !important;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+            background-color: #38BDF8 !important;
+            border: 1px solid #0284C7 !important;
+            color: #0F172A !important;
+            box-shadow: 0 1px 3px 0 rgba(2, 132, 199, 0.25) !important;
         }
         div.stButton > button[kind="primary"]:hover {
-            background: #1D4ED8 !important;
-            border-color: #1E40AF !important;
+            background-color: #7DD3FC !important;
+            border-color: #0369A1 !important;
+            color: #0F172A !important;
+        }
+        div.stButton > button[kind="primary"] p,
+        div.stButton > button[kind="primary"] span,
+        div.stButton > button[kind="primary"] div {
+            color: #0F172A !important;
+            font-weight: 600 !important;
+        }
+
+        /* Secondary Button: Subtle Ice Blue with Clear Navy Text */
+        div.stButton > button:not([kind="primary"]) {
+            background-color: #F0F9FF !important;
+            border: 1px solid #BAE6FD !important;
+            color: #0369A1 !important;
+        }
+        div.stButton > button:not([kind="primary"]):hover {
+            background-color: #E0F2FE !important;
+            border-color: #7DD3FC !important;
+            color: #0284C7 !important;
+        }
+        div.stButton > button:not([kind="primary"]) p,
+        div.stButton > button:not([kind="primary"]) span,
+        div.stButton > button:not([kind="primary"]) div {
+            color: #0369A1 !important;
+            font-weight: 600 !important;
         }
 
         /* Inputs & Selectbox */
@@ -230,8 +258,8 @@ def inject_custom_css():
             padding: 10px 4px !important;
         }
         .stTabs [aria-selected="true"] {
-            color: #2563EB !important;
-            border-bottom: 2px solid #2563EB !important;
+            color: #0284C7 !important;
+            border-bottom: 2px solid #0284C7 !important;
             background: transparent !important;
         }
 
@@ -375,7 +403,7 @@ def render_sidebar(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase):
 
 
 def generate_preset_questions(profile: Any) -> list[str]:
-    """Generates clean, domain-appropriate questions tailored to dataset columns."""
+    """Generates exactly 10 clean, diverse analytical questions tailored to dataset columns."""
     numeric_cols = [c.clean_name for c in profile.columns if c.inferred_type == "numeric"]
     categorical_cols = [c.clean_name for c in profile.columns if c.inferred_type in ("categorical", "text")]
     date_cols = [c.clean_name for c in profile.columns if c.inferred_type == "datetime"]
@@ -383,35 +411,40 @@ def generate_preset_questions(profile: Any) -> list[str]:
     def r(col: str) -> str:
         return col.replace("_", " ")
 
-    options = []
+    num1 = numeric_cols[0] if numeric_cols else "revenue"
+    num2 = numeric_cols[1] if len(numeric_cols) > 1 else num1
+    num3 = numeric_cols[2] if len(numeric_cols) > 2 else num1
 
-    if numeric_cols and categorical_cols:
-        options.append(f"What is the total {r(numeric_cols[0])} by {r(categorical_cols[0])}?")
+    cat1 = categorical_cols[0] if categorical_cols else "category"
+    cat2 = categorical_cols[1] if len(categorical_cols) > 1 else cat1
+    cat3 = categorical_cols[2] if len(categorical_cols) > 2 else cat1
 
-    if categorical_cols and numeric_cols:
-        cat = categorical_cols[1] if len(categorical_cols) > 1 else categorical_cols[0]
-        num = numeric_cols[1] if len(numeric_cols) > 1 else numeric_cols[0]
-        options.append(f"Show the top 5 {r(cat)} ranked by {r(num)}.")
+    dt1 = date_cols[0] if date_cols else "order_date"
 
-    if numeric_cols and categorical_cols:
-        num = numeric_cols[2] if len(numeric_cols) > 2 else numeric_cols[-1]
-        cat = categorical_cols[1] if len(categorical_cols) > 1 else categorical_cols[-1]
-        options.append(f"What is the average {r(num)} per {r(cat)}?")
+    questions = [
+        # 1. Total metric by primary category
+        f"What is the total {r(num1)} by {r(cat1)}?",
+        # 2. Top 5 ranking
+        f"Show the top 5 {r(cat2)} ranked by {r(num2)}.",
+        # 3. Average metric per segment
+        f"What is the average {r(num3)} per {r(cat3)}?",
+        # 4. Temporal trend
+        f"How does {r(num1)} trend month-over-month?",
+        # 5. Frequency / volume distribution
+        f"How many records are there for each {r(cat1)}?",
+        # 6. Peak / maximum performer
+        f"Which {r(cat2)} has the highest {r(num1)}?",
+        # 7. Lowest / minimum performer
+        f"Which {r(cat3)} has the lowest {r(num2)}?",
+        # 8. Comparison between two metrics
+        f"Compare {r(num1)} vs {r(num2)} across each {r(cat1)}.",
+        # 9. Conditional threshold filter
+        f"Find all records with {r(num3)} greater than 4.5.",
+        # 10. Summary statistics overview
+        f"Show overall summary statistics (min, max, average) for {r(num1)}.",
+    ]
 
-    if date_cols and numeric_cols:
-        options.append(f"How does {r(numeric_cols[0])} trend month-over-month?")
-
-    if categorical_cols:
-        options.append(f"How many records are there for each {r(categorical_cols[0])}?")
-
-    if not options:
-        options = [
-            "Show summary statistics for this dataset.",
-            "Count total records.",
-            "List the first 10 rows.",
-        ]
-
-    return options
+    return questions[:10]
 
 
 def run_agentic_pipeline(
@@ -481,23 +514,24 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
     if df is None or profile is None:
         st.markdown(
             """
-            <div class="analytics-card" style="text-align: center; padding: 48px 24px; margin-top: 12px;">
-                <h3 style="font-size: 1.25rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;">
-                    No Active Dataset Loaded
-                </h3>
-                <p style="color: #64748B; font-size: 0.9rem; max-width: 500px; margin: 0 auto 24px auto;">
-                    Upload a CSV or Excel dataset from the sidebar to inspect schemas, execute safe analytical SQL,
-                    and generate verified visualizations.
+            <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 40px 24px; text-align: center; margin-top: 12px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                <div style="font-size: 1.15rem; font-weight: 700; color: #0F172A; margin-bottom: 8px;">
+                    Welcome to Agentic Data Analyst
+                </div>
+                <p style="color: #64748B; font-size: 0.9rem; max-width: 540px; margin: 0 auto 20px auto; line-height: 1.6;">
+                    To get started, click the button below to load the benchmark sales dataset,
+                    or upload your own CSV/Excel file in the left sidebar.
                 </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
+        st.markdown("<div style='margin-top: 16px;'></div>", unsafe_allow_html=True)
         col_empty_1, col_empty_2, col_empty_3 = st.columns([1, 2, 1])
         with col_empty_2:
             if st.button("Load Benchmark Sales Dataset", type="primary", use_container_width=True):
-                with st.spinner("Loading benchmark dataset..."):
+                with st.spinner("Loading benchmark dataset and indexing glossary..."):
                     load_benchmark_dataset(rag)
                     st.rerun()
         return
@@ -521,6 +555,20 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
         unsafe_allow_html=True,
     )
 
+    # First Time User Guidance Callout
+    st.markdown(
+        """
+        <div class="onboarding-guide-card">
+            <div class="guide-step-title">How to use this dashboard:</div>
+            <div class="guide-step-desc">
+                <strong>Step 1:</strong> Select one of the 10 preset questions from the dropdown below (or type your own in the prompt box).<br/>
+                <strong>Step 2:</strong> Click the light-blue <strong>'Run Analysis'</strong> button to execute multi-agent planning, safe SQL execution, and visual generation.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     # Main Tabs
     tab_analysis, tab_preview, tab_schema, tab_rag, tab_history = st.tabs([
         "Analysis",
@@ -533,29 +581,39 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
     with tab_analysis:
         st.markdown("<div style='margin-bottom: 12px;'></div>", unsafe_allow_html=True)
 
-        # Structured Question Selection (Dropdown restored per user request)
+        # 10 Questions Dropdown
         preset_questions = generate_preset_questions(profile)
-        dropdown_options = ["Select a preset analytical question..."] + preset_questions + ["Custom Question..."]
+        dropdown_options = (
+            ["-- Select from 10 preset analytical questions --"]
+            + [f"{idx+1}. {q}" for idx, q in enumerate(preset_questions)]
+            + ["Custom Question (Enter your own below)..."]
+        )
 
         selected_dropdown = st.selectbox(
-            "Analytical Questions (Tailored to this dataset):",
+            "Step 1: Select an Analytical Question (10 Options Available):",
             options=dropdown_options,
             index=0,
-            help="Choose a pre-formulated analytical question or enter your own below.",
+            help="Select one of the 10 column-tailored analytical questions below.",
         )
 
-        # Sync selection into text input
+        # Auto-sync selected question into query text input
         initial_input = ""
-        if selected_dropdown not in ("Select a preset analytical question...", "Custom Question..."):
-            initial_input = selected_dropdown
+        if selected_dropdown not in ("-- Select from 10 preset analytical questions --", "Custom Question (Enter your own below)..."):
+            # Strip number prefix like "1. "
+            if ". " in selected_dropdown:
+                initial_input = selected_dropdown.split(". ", 1)[1]
+            else:
+                initial_input = selected_dropdown
 
         user_query = st.text_input(
-            "Query Prompt:",
+            "Query Prompt (Auto-filled from dropdown or editable):",
             value=initial_input,
-            placeholder="Type your analytical question in plain English...",
+            placeholder="Select a question above or type your question in plain English...",
         )
 
-        col_run1, col_run2 = st.columns([5, 1])
+        # Step 2: Clear Action Button
+        st.caption("Step 2: Click the button below to execute the multi-agent pipeline:")
+        col_run1, col_run2 = st.columns([4, 1])
         with col_run1:
             run_clicked = st.button("Run Analysis", type="primary", use_container_width=True)
         with col_run2:
@@ -565,7 +623,7 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
 
         if run_clicked:
             if not user_query.strip():
-                st.warning("Please select a preset question or enter a question prompt.")
+                st.warning("Please select a question from the dropdown above or enter your question.")
             else:
                 with st.spinner("Executing analytical workflow (Planning ➔ Retrieval ➔ DuckDB Execution)..."):
                     result_state = run_agentic_pipeline(
@@ -583,7 +641,7 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
         if latest and latest.get("user_query") == user_query:
             st.markdown("---")
 
-            # 1. RAG Definitions Card (if relevant definitions were retrieved)
+            # 1. RAG Definitions Card
             rag_matches = latest.get("rag_matches", [])
             if rag_matches:
                 with st.container():
@@ -619,7 +677,7 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
             res_df = latest.get("query_results_df")
             chart_cfg = latest.get("chart_config")
             if res_df is not None and not res_df.empty and chart_cfg:
-                st.markdown("<div class='card-header-title'>Visual Analytics</div>", unsafe_allow_html=True)
+                st.markdown("<div style='font-weight: 600; color: #0F172A; font-size: 0.95rem; margin: 16px 0 10px 0;'>Visual Analytics</div>", unsafe_allow_html=True)
                 fig = build_plotly_chart(
                     df=res_df,
                     chart_type=chart_cfg.get("chart_type", "bar"),
@@ -640,7 +698,7 @@ def render_dashboard(llm: LLMClient, memory: SQLiteMemory, rag: RAGKnowledgeBase
 
             # 4. Result Records Table
             if res_df is not None and not res_df.empty:
-                st.markdown(f"<div class='card-header-title'>Query Results ({len(res_df)} records)</div>", unsafe_allow_html=True)
+                st.markdown(f"<div style='font-weight: 600; color: #0F172A; font-size: 0.95rem; margin: 16px 0 10px 0;'>Query Results ({len(res_df)} records)</div>", unsafe_allow_html=True)
                 st.dataframe(res_df, use_container_width=True)
 
             # 5. Safe SQL Inspector
